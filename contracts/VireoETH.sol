@@ -8,8 +8,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
-contract RDVETH is ERC20, ERC20Burnable, Pausable, Ownable, ERC20Permit, ERC20Votes {
-    constructor() ERC20("RDVETH", "rdvETH") ERC20Permit("RDVETH") {}
+contract VireoETH is ERC20, ERC20Burnable, Pausable, Ownable, ERC20Permit, ERC20Votes {
+    constructor() ERC20("VireoETH", "vrETH") ERC20Permit("VireoETH") {}
 
     function pause() public onlyOwner {
         _pause();
@@ -53,4 +53,6 @@ contract RDVETH is ERC20, ERC20Burnable, Pausable, Ownable, ERC20Permit, ERC20Vo
     {
         super._burn(account, amount);
     }
+
+    
 }

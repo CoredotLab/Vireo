@@ -11,12 +11,12 @@ import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract RDVMON is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable, ERC721Burnable, EIP712, ERC721Votes {
+contract VireoX is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable, ERC721Burnable, EIP712, ERC721Votes {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("RDVMON", "RDVMON") EIP712("RDVMON", "1") {}
+    constructor() ERC721("VireoX", "VireoX") EIP712("VireoX", "1") {}
 
     function _baseURI() internal pure override returns (string memory) {
         return "http";
