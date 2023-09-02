@@ -1,4 +1,5 @@
 # Vireo
+![](https://github-production-user-asset-6210df.s3.amazonaws.com/141917797/265234410-2a9db320-cc39-4333-a0cd-45010555bde2.png)
 
 ## Overview
 *"Vireo"* is Latin for "green". Vireo is simply Web3.0 "GreenPeace". Vireo is a project that started with the belief that blockchain technology can help the environment. 
