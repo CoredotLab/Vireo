@@ -14,7 +14,7 @@ interface Ilido_stETH {
      */
     function submit(address _referral) external payable returns (uint256);
     
-    function transferFrom(address from, address to, uint256 value) external returns (bool);
+    function transfer(address _recipient, uint256 _amount) external returns (bool);
 
     function approve(address spender, uint256 value) external returns (bool);
 }
@@ -30,7 +30,7 @@ contract VireoStaker is Ownable {
 
     mapping(address => uint256) public userStETHBalances;
 
-    string vireoXLevelOneUri = "https://static.wikia.nocookie.net/pokemon/images/5/57/%EC%9D%B4%EC%83%81%ED%95%B4%EC%94%A8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/1200?cb=20170404232618&path-prefix=ko";
+    string vireoXLevelOneUri = "ipfs://Qma3qLvzX9Zuc6C7vRPanGDHhKDGHMBVnKxBwzKnJe7Zbk";
     
 
     constructor(address _vrETH, address _vireoX) {
@@ -63,7 +63,7 @@ contract VireoStaker is Ownable {
         } else {
             vireoX.requestEditUserInfo(msg.sender, msg.value);
         }
-
+    
         emit Staked(msg.sender, stETHAmount);
     }
 
@@ -71,15 +71,14 @@ contract VireoStaker is Ownable {
     function unstakeETH(uint256 amount) public {
         require(amount > 0, "amount must be greater than 0");
         require(userStETHBalances[msg.sender] >= amount, "not enough stETH");
-        lido.transferFrom(address(this), msg.sender, amount);
+        lido.transfer(msg.sender, amount);
         vrETH.burnFrom(msg.sender, amount);
         userStETHBalances[msg.sender] -= amount;
         emit Unstaked(msg.sender, amount);
     }
 
-    
-
-
-
+    function approveStEth(uint256 amount) public {
+        lido.approve(address(this), amount);
+    }    
     
 }

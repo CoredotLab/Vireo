@@ -1,0 +1,20 @@
+{
+  "level": "2",
+  "name": "VireoB",
+  "description": "This creature is VireoB. This cute little creature appeared to you at unexpected times because you care about the environment, and it grows by feeding off of your efforts to help the planet. Show your ongoing efforts. ",
+  "image": "https://github-production-user-asset-6210df.s3.amazonaws.com/141917797/265217719-98152319-5aea-4099-857a-86fe50c3f40d.png",
+  "attributes": [
+    {
+      "name": "color",
+      "value": "green"
+    },
+    {
+      "name": "size",
+      "value": "B size"
+    },
+    {
+      "name": "hair",
+      "value": "two"
+    }
+  ]
+}

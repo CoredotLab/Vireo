@@ -1,0 +1,20 @@
+{
+  "level": "1",
+  "name": "VireoA",
+  "description": "This creature is VireoA. This cute little creature appeared to you at unexpected times because you care about the environment, and it grows by feeding off of your efforts to help the planet. Show your ongoing efforts. ",
+  "image": "https://github-production-user-asset-6210df.s3.amazonaws.com/141917797/265217712-bbbe338b-f7bb-4261-bfbf-8f39b34c4812.png",
+  "attributes": [
+    {
+      "name": "color",
+      "value": "green"
+    },
+    {
+      "name": "size",
+      "value": "A size"
+    },
+    {
+      "name": "hair",
+      "value": "one"
+    }
+  ]
+}
