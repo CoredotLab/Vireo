@@ -7,18 +7,34 @@ import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol
 import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
+import "./VireoETH.sol";
+import "./VireoX.sol";
 
 contract VireoDAO is Governor, GovernorSettings, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
-    constructor(IVotes _token, TimelockController _timelock)
+
+    VireoX public vireoX;
+
+
+
+    constructor(IVotes _vrETH, TimelockController _timelock, address _vireoX)
         Governor("VireoDAO")
         GovernorSettings(7200 /* 1 day */, 50400 /* 1 week */, 0)
-        GovernorVotes(_token)
+        GovernorVotes(_vrETH)
         GovernorVotesQuorumFraction(4)
         GovernorTimelockControl(_timelock)
-    {}
+    {
+        vireoX = VireoX(_vireoX);
+    }
+
+    // only has vireoX
+    modifier hasVireoX() {
+        require(vireoX.balanceOf(msg.sender) > 0, "VireoDAO: only has vireoX");
+        _;
+    }
+
+
 
     // The following functions are overrides required by Solidity.
-
     function votingDelay()
         public
         view
@@ -56,6 +72,7 @@ contract VireoDAO is Governor, GovernorSettings, GovernorCountingSimple, Governo
     }
 
     function propose(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description)
+        hasVireoX
         public
         override(Governor, IGovernor)
         returns (uint256)
@@ -104,4 +121,6 @@ contract VireoDAO is Governor, GovernorSettings, GovernorCountingSimple, Governo
     {
         return super.supportsInterface(interfaceId);
     }
+
+    
 }

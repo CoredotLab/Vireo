@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
 import "./VireoETH.sol";
@@ -39,20 +39,24 @@ contract VireoStaker {
     event Unstaked(address indexed user, uint256 amount);
 
     function stakeETH() public payable {
+        require(msg.value > 0, "msg.value must be greater than 0");
         uint256 stETHAmount = lido.submit{value: msg.value}(address(0));
         userStETHBalances[msg.sender] += stETHAmount;
         vrETH.mint(msg.sender, stETHAmount);
         emit Staked(msg.sender, stETHAmount);
     }
 
-    // burn rdvETH and return stETH what this contract has to user
+    // burn vrETH and return stETH what this contract has to user
     function unstakeETH(uint256 amount) public {
+        require(amount > 0, "amount must be greater than 0");
         require(userStETHBalances[msg.sender] >= amount, "not enough stETH");
         lido.transferFrom(address(this), msg.sender, amount);
         vrETH.burnFrom(msg.sender, amount);
         userStETHBalances[msg.sender] -= amount;
         emit Unstaked(msg.sender, amount);
     }
+
+    
 
 
 
