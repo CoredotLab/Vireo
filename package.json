@@ -27,5 +27,8 @@
     "report": "npx hardhat coverage && npx hardhat coverage-report",
     "verify": "npx hardhat verify",
     "run": "npx hardhat run scripts/run.ts"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3"
   }
 }
