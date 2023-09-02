@@ -3,6 +3,7 @@ pragma solidity ^0.8.9;
 
 import "./VireoETH.sol";
 import "./VireoX.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface Ilido_stETH {
     /**
@@ -19,7 +20,7 @@ interface Ilido_stETH {
 }
 
 
-contract VireoStaker {
+contract VireoStaker is Ownable {
 
     // lido contract proxy address(testnet)
     address public lido_stETH = 0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F;
@@ -28,6 +29,8 @@ contract VireoStaker {
     VireoX public vireoX;
 
     mapping(address => uint256) public userStETHBalances;
+
+    string vireoXLevelOneUri = "https://static.wikia.nocookie.net/pokemon/images/5/57/%EC%9D%B4%EC%83%81%ED%95%B4%EC%94%A8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/1200?cb=20170404232618&path-prefix=ko";
     
 
     constructor(address _vrETH, address _vireoX) {
@@ -38,11 +41,29 @@ contract VireoStaker {
     event Staked(address indexed user, uint256 amount);
     event Unstaked(address indexed user, uint256 amount);
 
+    function editVireoETH(address _vrETH) public onlyOwner {
+        vrETH = VireoETH(_vrETH);
+    }
+
+    function editVireoX(address _vireoX) public onlyOwner {
+        vireoX = VireoX(_vireoX);
+    }
+
+
+
     function stakeETH() public payable {
         require(msg.value > 0, "msg.value must be greater than 0");
         uint256 stETHAmount = lido.submit{value: msg.value}(address(0));
         userStETHBalances[msg.sender] += stETHAmount;
         vrETH.mint(msg.sender, stETHAmount);
+        // check if user has vireoX
+        // if don't have
+        if (vireoX.balanceOf(msg.sender) == 0) {
+            vireoX.safeMint(msg.sender,vireoXLevelOneUri, msg.value);
+        } else {
+            vireoX.requestEditUserInfo(msg.sender, msg.value);
+        }
+
         emit Staked(msg.sender, stETHAmount);
     }
 

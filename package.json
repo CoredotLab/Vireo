@@ -29,6 +29,7 @@
     "run": "npx hardhat run scripts/run.ts"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.3"
+    "@openzeppelin/contracts": "^4.9.3",
+    "@remix-project/remixd": "^0.6.17"
   }
 }

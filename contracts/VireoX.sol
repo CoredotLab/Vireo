@@ -36,19 +36,20 @@ contract VireoX is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable
     mapping(address => UserStakeInfo) public userStakeInfo;
     
 
-    EvolutionInfo[] public evolutionInfos = [
-        EvolutionInfo(100,1,"VireoA","https"),
-        EvolutionInfo(1000,2,"VireoB","https"),
-        EvolutionInfo(10000,3,"VireoC","https")
-    ];
+    EvolutionInfo[] public evolutionInfos;
 
     // evolution added exp = K * (amount ** ALPHA) * (timestamp ** BETA)
     uint256 public ALPHA = 1;
     uint256 public BETA = 2;
     uint256 public K = 10;
     
-    constructor() ERC721("VireoX", "VireoX") EIP712("VireoX", "1") {}
+    constructor() ERC721("VireoX", "VireoX") EIP712("VireoX", "1") {
+        evolutionInfos.push(EvolutionInfo(100,1,"VireoA","https://static.wikia.nocookie.net/pokemon/images/5/57/%EC%9D%B4%EC%83%81%ED%95%B4%EC%94%A8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/1200?cb=20170404232618&path-prefix=ko"));
+        evolutionInfos.push(EvolutionInfo(1000,2,"VireoB","https://static.wikia.nocookie.net/pokemon/images/4/46/%EC%9D%B4%EC%83%81%ED%95%B4%ED%92%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170404232716&path-prefix=ko"));
+        evolutionInfos.push(EvolutionInfo(10000,3,"VireoC","https://static.wikia.nocookie.net/pokemon/images/3/34/%EC%9D%B4%EC%83%81%ED%95%B4%EA%BD%83_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/250?cb=20170404232813&path-prefix=ko"));
+    }
 
+    event GeneratedToken(address user, uint256 tokenId);
     event ConstantsChanged(uint256 ALPHA, uint256 BETA, uint256 K);
     event EditedEvolutionInfo(uint256 level, uint256 standardExp, string levelName, string uri);
     event AddedEvolutionInfo(uint256 level, uint256 standardExp, string levelName, string uri);
@@ -66,14 +67,28 @@ contract VireoX is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable
         _unpause();
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri, uint256 stakeAmount) public onlyOwner {
         // User can't mint more than 1 token.
         require(balanceOf(to) == 0, "VireoX: already minted");
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+        _generateUserInfo(to, stakeAmount, tokenId);
     }
+
+    function _generateUserInfo(address user, uint256 stakeAmount, uint256 tokenId) internal {
+        userStakeInfo[user] = UserStakeInfo(user, stakeAmount, block.timestamp, 1, 0, tokenId);
+        emit GeneratedToken(user, tokenId);
+    }
+
+
+    function requestEditUserInfo(address user, uint256 stakeAmount) public onlyOwner {
+        require(userStakeInfo[user].owner != address(0), "VireoX: user has not staked");
+        updateUserEvolution(user);
+        userStakeInfo[user].stakeAmount = stakeAmount;
+    }
+
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
