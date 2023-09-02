@@ -34,7 +34,7 @@ A real-time dashboard allows users to track how much is staked and accrued in th
 Stakers are granted DAO memberships that allow them voting rights on how the treasury is utilized.  
 DAO members can propose and vote on environmental initiatives.
 
-**Dynamic NFTs (D-NFT)**  
+**3. Dynamic NFTs (D-NFT)**  
 Stakers receive D-NFTs as proof of membership.  
 These D-NFTs evolve based on the amount and duration of the stake, and they can grant additional voting power.
 
